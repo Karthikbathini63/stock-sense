@@ -180,11 +180,10 @@
         Dashboard
     </a>
 
-    <a href="#">
-        <i class="fas fa-box"></i>
-        Products
-    </a>
-
+    <a href="{% url 'product_list' %}">
+    <i class="fas fa-box"></i>
+    Products
+</a>
     <a href="#">
         <i class="fas fa-warehouse"></i>
         Warehouses
@@ -248,7 +247,7 @@
                 </div>
 
                 <h6>Total Stock</h6>
-                <h2 id="totalStock">1,250</h2>
+                <h2 id="totalStock">{{ total_stock }}</h2>
                 <small class="text-muted">
                     Total inventory units
                 </small>
@@ -263,7 +262,7 @@
                 </div>
 
                 <h6>Low Stock</h6>
-                <h2 id="lowStock">25</h2>
+                <h2 id="lowStock">{{ low_stock }}</h2>
                 <small class="text-warning">
                     Items requiring attention
                 </small>
@@ -278,7 +277,7 @@
                 </div>
 
                 <h6>Out of Stock</h6>
-                <h2 id="outOfStock">10</h2>
+                <h2 id="outOfStock">{{ out_of_stock }}</h2>
                 <small class="text-danger">
                     Items currently unavailable
                 </small>

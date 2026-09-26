@@ -1,0 +1,94 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Edit Product - StockSense{% endblock %}
+
+{% block page_title %}Edit Product{% endblock %}
+
+{% block content %}
+
+<h2>Edit Product</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div>
+        <label>SKU</label>
+        <input type="text"
+               name="sku"
+               value="{{ product.sku }}"
+               required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Product Name</label>
+        <input type="text"
+               name="name"
+               value="{{ product.name }}"
+               required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Category</label>
+
+        <select name="category" required>
+
+            {% for category in categories %}
+
+                <option value="{{ category.id }}"
+                    {% if category.id == product.category.id %}
+                        selected
+                    {% endif %}>
+                    {{ category.name }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Unit of Measure</label>
+        <input type="text"
+               name="unit_of_measure"
+               value="{{ product.unit_of_measure }}"
+               required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Description</label>
+        <textarea name="description">{{ product.description }}</textarea>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Reorder Level</label>
+        <input type="number"
+               name="reorder_level"
+               min="0"
+               value="{{ product.reorder_level }}"
+               required>
+    </div>
+
+    <br>
+
+    <button type="submit">
+        Save Changes
+    </button>
+
+    <a href="{% url 'product_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
