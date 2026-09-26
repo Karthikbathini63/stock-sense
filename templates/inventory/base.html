@@ -1,0 +1,104 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}StockSense{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <h2>StockSense</h2>
+                <p>Inventory Management</p>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="/" class="nav-item">
+                    Dashboard
+                </a>
+
+                <a href="#" class="nav-item">
+                    Products
+                </a>
+
+                <a href="#" class="nav-item">
+                    Receipts
+                </a>
+
+                <a href="#" class="nav-item">
+                    Deliveries
+                </a>
+
+                <a href="#" class="nav-item">
+                    Transfers
+                </a>
+
+                <a href="#" class="nav-item">
+                    Adjustments
+                </a>
+
+                <a href="#" class="nav-item">
+                    Stock Ledger
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <a href="/admin/" class="nav-item">
+                    Admin Panel
+                </a>
+
+                <a href="#" class="nav-item logout">
+                    Logout
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Main Area -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <header class="top-header">
+
+                <div>
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+
+                <div class="user-info">
+                    <span>Welcome, {{ user.username }}</span>
+                </div>
+
+            </header>
+
+
+            <!-- Page Content -->
+            <section class="content">
+
+                {% block content %}
+
+                {% endblock %}
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
