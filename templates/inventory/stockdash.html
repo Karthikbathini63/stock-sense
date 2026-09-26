@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>StockSense Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            background: #f1f5f9;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            background: #172554;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .sidebar h3 {
+            text-align: center;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            text-decoration: none;
+            color: #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .sidebar i {
+            margin-right: 12px;
+        }
+
+        /* Main content */
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h2 {
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        /* Dashboard cards */
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            height: 100%;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card .card-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card h6 {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .stat-card h2 {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .blue {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .orange {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .red {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .purple {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .cyan {
+            background: #cffafe;
+            color: #0891b2;
+        }
+
+        .green {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .topbar {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <h3>
+        <i class="fas fa-boxes-stacked"></i>
+        StockSense
+    </h3>
+
+    <a href="#" class="active">
+        <i class="fas fa-chart-line"></i>
+        Dashboard
+    </a>
+
+    <a href="#">
+        <i class="fas fa-box"></i>
+        Products
+    </a>
+
+    <a href="#">
+        <i class="fas fa-warehouse"></i>
+        Warehouses
+    </a>
+
+    <a href="#">
+        <i class="fas fa-arrow-down"></i>
+        Receipts
+    </a>
+
+    <a href="#">
+        <i class="fas fa-truck"></i>
+        Deliveries
+    </a>
+
+    <a href="#">
+        <i class="fas fa-right-left"></i>
+        Transfers
+    </a>
+
+    <a href="#">
+        <i class="fas fa-gear"></i>
+        Settings
+    </a>
+
+    <hr>
+
+    <a href="#">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+    </a>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <div>
+            <h2>Dashboard</h2>
+            <p class="text-muted mb-0">
+                Welcome to StockSense Inventory Management
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <i class="fas fa-user-circle fa-2x text-primary"></i>
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <!-- DASHBOARD CARDS -->
+    <div class="row g-4">
+
+        <!-- TOTAL STOCK -->
+        <div class="col-xl-4 col-md-6">
+            <div class="stat-card">
+                <div class="card-icon blue">
+                    <i class="fas fa-boxes-stacked"></i>
+                </div>
+
+                <h6>Total Stock</h6>
+                <h2 id="totalStock">1,250</h2>
+                <small class="text-muted">
+                    Total inventory units
+                </small>
+            </div>
+        </div>
+
+        <!-- LOW STOCK -->
+        <div class="col-xl-4 col-md-6">
+            <div class="stat-card">
+                <div class="card-icon orange">
+                    <i class="fas fa-triangle-exclamation"></i>
+                </div>
+
+                <h6>Low Stock</h6>
+                <h2 id="lowStock">25</h2>
+                <small class="text-warning">
+                    Items requiring attention
+                </small>
+            </div>
+        </div>
+
+        <!-- OUT OF STOCK -->
+        <div class="col-xl-4 col-md-6">
+            <div class="stat-card">
+                <div class="card-icon red">
+                    <i class="fas fa-box-open"></i>
+                </div>
+
+                <h6>Out of Stock</h6>
+                <h2 id="outOfStock">10</h2>
+                <small class="text-danger">
+                    Items currently unavailable
+                </small>
+            </div>
+        </div>
+
+        <!-- PENDING RECEIPTS -->
+        <div class="col-xl-4 col-md-6">
+            <div class="stat-card">
+                <div class="card-icon purple">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+
+                <h6>Pending Receipts</h6>
+                <h2 id="pendingReceipts">18</h2>
+                <small class="text-muted">
+                    Incoming stock awaiting receipt
+                </small>
+            </div>
+        </div>
+
+        <!-- PENDING DELIVERIES -->
+        <div class="col-xl-4 col-md-6">
+            <div class="stat-card">
+                <div class="card-icon cyan">
+                    <i class="fas fa-truck"></i>
+                </div>
+
+                <h6>Pending Deliveries</h6>
+                <h2 id="pendingDeliveries">12</h2>
+                <small class="text-muted">
+                    Outgoing orders awaiting delivery
+                </small>
+            </div>
+        </div>
+
+        <!-- TRANSFERS -->
+        <div class="col-xl-4 col-md-6">
+            <div class="stat-card">
+                <div class="card-icon green">
+                    <i class="fas fa-right-left"></i>
+                </div>
+
+                <h6>Transfers</h6>
+                <h2 id="transfers">8</h2>
+                <small class="text-muted">
+                    Pending warehouse transfers
+                </small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHART AND RECENT ACTIVITY -->
+    <div class="row g-4 mt-2">
+
+        <!-- STOCK CHART -->
+        <div class="col-lg-6">
+            <div class="content-card">
+                <h5 class="mb-4">Stock Overview</h5>
+                <canvas id="stockChart"></canvas>
+            </div>
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+        <div class="col-lg-6">
+            <div class="content-card">
+                <h5 class="mb-4">Recent Stock Activity</h5>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Action</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Laptop</td>
+                                <td>Receipt</td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        Completed
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Keyboard</td>
+                                <td>Delivery</td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Monitor</td>
+                                <td>Transfer</td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        In Progress
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Mouse</td>
+                                <td>Receipt</td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        Completed
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById("stockChart");
+
+    new Chart(ctx, {
+        type: "bar",
+
+        data: {
+            labels: [
+                "Available",
+                "Low Stock",
+                "Out of Stock"
+            ],
+
+            datasets: [{
+                label: "Inventory",
+                data: [1215, 25, 10],
+                backgroundColor: [
+                    "#2563eb",
+                    "#f59e0b",
+                    "#ef4444"
+                ],
+                borderRadius: 6
+            }]
+        },
+
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
