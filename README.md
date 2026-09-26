@@ -1,0 +1,2 @@
+# stock-sense
+hackathon-odoo
