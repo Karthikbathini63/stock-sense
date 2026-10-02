@@ -1,0 +1,85 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Add Product - StockSense{% endblock %}
+
+{% block page_title %}Add Product{% endblock %}
+
+{% block content %}
+
+<h2>Add New Product</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div>
+        <label>SKU</label>
+        <input type="text" name="sku" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Product Name</label>
+        <input type="text" name="name" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Category</label>
+
+        <select name="category" required>
+
+            <option value="">Select Category</option>
+
+            {% for category in categories %}
+                <option value="{{ category.id }}">
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Unit of Measure</label>
+        <input type="text"
+               name="unit_of_measure"
+               placeholder="Pieces"
+               required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Description</label>
+        <textarea name="description"></textarea>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Reorder Level</label>
+        <input type="number"
+               name="reorder_level"
+               min="0"
+               value="0"
+               required>
+    </div>
+
+    <br>
+
+    <button type="submit">
+        Add Product
+    </button>
+
+    <a href="{% url 'product_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

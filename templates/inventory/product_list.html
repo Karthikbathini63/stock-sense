@@ -1,0 +1,53 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Products - StockSense{% endblock %}
+
+{% block page_title %}Products{% endblock %}
+
+{% block content %}
+
+<h2>Product List</h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
+       <tr>
+        <th>SKU</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Unit</th>
+        <th>Description</th>
+        <th>Reorder Level</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+        {% for product in products %}
+
+        <tr>
+    <td>{{ product.sku }}</td>
+    <td>{{ product.name }}</td>
+    <td>{{ product.category.name }}</td>
+    <td>{{ product.unit_of_measure }}</td>
+    <td>{{ product.description }}</td>
+    <td>{{ product.reorder_level }}</td>
+
+    <td>
+        <a href="{% url 'edit_product' product.id %}">
+            Edit
+        </a>
+    </td>
+</tr>
+        {% empty %}
+
+        <tr>
+            <td colspan="7">No products found.</td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}
