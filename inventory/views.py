@@ -1,57 +1,12 @@
+import secrets
 from django.shortcuts import render, redirect
-<<<<<<< HEAD
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
-import secrets
-=======
-from .models import Product, Stock
+from django.contrib.auth.models import User
+from .models import Product, Category
 
 
-def dashboard(request):
-    return render(request, "inventory/dashboard.html")
->>>>>>> origin/main
-
-
-def stockdash(request):
-
-    stocks = Stock.objects.select_related("product")
-
-    total_stock = sum(
-        stock.quantity
-        for stock in stocks
-    )
-
-    low_stock = sum(
-        1
-        for stock in stocks
-        if 0 < stock.quantity <= stock.product.reorder_level
-    )
-
-    out_of_stock = sum(
-        1
-        for stock in stocks
-        if stock.quantity == 0
-    )
-
-    return render(
-        request,
-        "inventory/stockdash.html",
-        {
-            "total_stock": total_stock,
-            "low_stock": low_stock,
-            "out_of_stock": out_of_stock,
-        }
-    )
-
-
-
-def stocklog(request):
-    return render(request, "inventory/stocklog.html")
-
-
-<<<<<<< HEAD
 def register(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -135,7 +90,8 @@ def send_registration_otp(request):
         "success": False,
         "message": "Invalid request."
     })
-=======
+
+
 def product_list(request):
     products = Product.objects.all().order_by("name")
 
@@ -147,7 +103,6 @@ def product_list(request):
 
 
 def add_product(request):
-
     if request.method == "POST":
         sku = request.POST.get("sku")
         name = request.POST.get("name")
@@ -167,7 +122,6 @@ def add_product(request):
 
         return redirect("product_list")
 
-    from .models import Category
     categories = Category.objects.all().order_by("name")
 
     return render(
@@ -175,8 +129,9 @@ def add_product(request):
         "inventory/add_product.html",
         {"categories": categories}
     )
-def edit_product(request, product_id):
 
+
+def edit_product(request, product_id):
     product = Product.objects.get(id=product_id)
 
     if request.method == "POST":
@@ -191,7 +146,6 @@ def edit_product(request, product_id):
 
         return redirect("product_list")
 
-    from .models import Category
     categories = Category.objects.all().order_by("name")
 
     return render(
@@ -205,7 +159,6 @@ def edit_product(request, product_id):
 
 
 def delete_product(request, product_id):
-
     product = Product.objects.get(id=product_id)
 
     if request.method == "POST":
@@ -217,4 +170,3 @@ def delete_product(request, product_id):
         "inventory/delete_product.html",
         {"product": product}
     )
->>>>>>> origin/main
