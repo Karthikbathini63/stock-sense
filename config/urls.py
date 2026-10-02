@@ -4,23 +4,36 @@ from inventory import views
 
 
 urlpatterns = [
-<<<<<<< HEAD
-    path('admin/', admin.site.urls),
-
-    path('stockdash/', views.stockdash, name='stockdash'),
-    path('stocklog/', views.stocklog, name='stocklog'),
-
-    path('register/', views.register, name='register'),
-    path('send-registration-otp/', views.send_registration_otp, name='send_registration_otp'),
-=======
     path("admin/", admin.site.urls),
 
+    # Dashboard
     path("stockdash/", views.stockdash, name="stockdash"),
     path("stocklog/", views.stocklog, name="stocklog"),
+
+    # Product Management
     path("products/", views.product_list, name="product_list"),
     path("products/add/", views.add_product, name="add_product"),
-    path("products/edit/<int:product_id>/", views.edit_product, name="edit_product"),
-    path("products/delete/<int:product_id>/", views.delete_product, name="delete_product"),
+    path(
+        "products/edit/<int:product_id>/",
+        views.edit_product,
+        name="edit_product"
+    ),
+    path(
+        "products/delete/<int:product_id>/",
+        views.delete_product,
+        name="delete_product"
+    ),
+
+    # Registration
+    path("register/", views.register, name="register"),
+    path(
+        "send-registration-otp/",
+        views.send_registration_otp,
+        name="send_registration_otp"
+    ),
+    # Login
+    path("login/", views.login, name="login"),
+
+    # Default page
     path("", views.dashboard, name="dashboard"),
->>>>>>> origin/main
 ]

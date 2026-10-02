@@ -1,14 +1,67 @@
 import secrets
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
-from .models import Product, Category
+from django.contrib.auth import authenticate, login as auth_login
 
+from .models import Product, Category, Stock
+
+
+# =========================
+# DASHBOARD
+# =========================
+
+def dashboard(request):
+    return render(request, "inventory/dashboard.html")
+
+
+def stockdash(request):
+
+    stocks = Stock.objects.select_related("product")
+
+    total_stock = sum(
+        stock.quantity
+        for stock in stocks
+    )
+
+    low_stock = sum(
+        1
+        for stock in stocks
+        if 0 < stock.quantity <= stock.product.reorder_level
+    )
+
+    out_of_stock = sum(
+        1
+        for stock in stocks
+        if stock.quantity == 0
+    )
+
+    return render(
+        request,
+        "inventory/stockdash.html",
+        {
+            "total_stock": total_stock,
+            "low_stock": low_stock,
+            "out_of_stock": out_of_stock,
+        }
+    )
+
+
+def stocklog(request):
+    return render(request, "inventory/stocklog.html")
+
+
+# =========================
+# REGISTRATION
+# =========================
 
 def register(request):
+
     if request.method == "POST":
+
         username = request.POST.get("username")
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -55,11 +108,16 @@ def register(request):
 
         return redirect("login")
 
-    return render(request, "inventory/register.html")
+    return render(
+        request,
+        "inventory/register.html"
+    )
 
 
 def send_registration_otp(request):
+
     if request.method == "POST":
+
         email = request.POST.get("email")
 
         if not email:
@@ -91,8 +149,43 @@ def send_registration_otp(request):
         "message": "Invalid request."
     })
 
+# =========================
+# LOGIN
+# =========================
+
+def login(request):
+
+    if request.method == "POST":
+
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+            auth_login(request, user)
+            return redirect("stockdash")
+
+        return render(
+            request,
+            "inventory/stocklog.html",
+            {"error": "Invalid username or password."}
+        )
+
+    return render(
+        request,
+        "inventory/stocklog.html"
+    )
+# =========================
+# PRODUCT MANAGEMENT
+# =========================
 
 def product_list(request):
+
     products = Product.objects.all().order_by("name")
 
     return render(
@@ -103,7 +196,9 @@ def product_list(request):
 
 
 def add_product(request):
+
     if request.method == "POST":
+
         sku = request.POST.get("sku")
         name = request.POST.get("name")
         category_id = request.POST.get("category")
@@ -132,9 +227,11 @@ def add_product(request):
 
 
 def edit_product(request, product_id):
+
     product = Product.objects.get(id=product_id)
 
     if request.method == "POST":
+
         product.sku = request.POST.get("sku")
         product.name = request.POST.get("name")
         product.category_id = request.POST.get("category")
@@ -159,6 +256,7 @@ def edit_product(request, product_id):
 
 
 def delete_product(request, product_id):
+
     product = Product.objects.get(id=product_id)
 
     if request.method == "POST":

@@ -59,6 +59,11 @@
         </div>
 
         <h4 class="text-center mb-4">Create Account</h4>
+        {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
 
         <form method="POST" action="">
 

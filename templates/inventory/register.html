@@ -62,7 +62,8 @@
  
         <h4 class="text-center mb-4">Create Account</h4> 
  
-        <form method="POST" action=""> 
+        <form method="POST" action="">
+            {% csrf_token %} 
  
              
  
@@ -117,9 +118,11 @@
                        placeholder="Confirm password" 
                        required> 
  
-                <button type="button" class="btn btn-secondary mt-2"> 
-                    Send OTP 
-                </button> 
+                <button type="button" id="sendOtpBtn" class="btn btn-secondary mt-2">
+                     Send OTP
+                </button>
+
+                <div id="otpMessage" class="mt-2"></div>
             </div> 
  
             <div class="mb-3"> 
@@ -153,6 +156,85 @@
     </div> 
  
 </div>
+
+<script>
+document.getElementById("sendOtpBtn").addEventListener("click", function () {
+
+    const email = document.getElementById("email").value;
+    const button = this;
+    const message = document.getElementById("otpMessage");
+
+    if (!email) {
+        message.innerHTML =
+            '<span class="text-danger">Please enter your email first.</span>';
+        return;
+    }
+
+    button.disabled = true;
+    button.innerText = "Sending...";
+
+    fetch("/send-registration-otp/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: "email=" + encodeURIComponent(email)
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+            message.innerHTML =
+                '<span class="text-success">' + data.message + '</span>';
+        } else {
+            message.innerHTML =
+                '<span class="text-danger">' + data.message + '</span>';
+        }
+
+        button.disabled = false;
+        button.innerText = "Send OTP";
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        message.innerHTML =
+            '<span class="text-danger">Failed to send OTP.</span>';
+
+        button.disabled = false;
+        button.innerText = "Send OTP";
+    });
+});
+
+
+function getCookie(name) {
+
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+
+        const cookies = document.cookie.split(";");
+
+        for (let cookie of cookies) {
+
+            cookie = cookie.trim();
+
+            if (cookie.startsWith(name + "=")) {
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(name.length + 1)
+                    );
+
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
+</script>
 </body>
 </html>
 

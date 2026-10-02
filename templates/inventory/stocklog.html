@@ -53,8 +53,14 @@
     <div class="brand">StockSense</div>
 
     <p class="subtitle">Inventory Management System</p>
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
 
     <form method="POST">
+        {% csrf_token %}
 
         
 
@@ -103,8 +109,7 @@
 
     <p class="text-center mt-4 mb-0">
         Don't have an account?
-        <a href="#">Create Account</a>
-    </p>
+        <a href="{% url 'register' %}">Create Account</a>
 
 </div>
 
