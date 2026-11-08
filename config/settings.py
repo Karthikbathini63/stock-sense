@@ -124,6 +124,18 @@ if os.environ.get("DATABASE_URL"):
             ssl_require=not DEBUG,
         ),
     }
+elif os.environ.get("VERCEL"):
+    # Vercel serverless filesystem is read-only except /tmp, and backups
+    # die with the instance. Use /tmp SQLite so the app still boots if
+    # no DATABASE_URL is configured yet.
+    DATA_DIR = Path("/tmp")
+    DATA_DIR.mkdir(exist_ok=True)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": DATA_DIR / "db.sqlite3",
+        }
+    }
 else:
     DATABASES = {
         'default': {

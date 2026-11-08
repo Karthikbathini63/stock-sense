@@ -11,7 +11,6 @@ __pycache__/
 # Local database
 db.sqlite3
 backups/
-staticfiles/
 
 # Environment variables
 .env
@@ -22,3 +21,5 @@ staticfiles/
 # OS files
 .DS_Store
 Thumbs.db
+.vercel
+.env*
