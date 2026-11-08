@@ -191,9 +191,15 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.2/topics/email/#topic-email-configuration
 
 # Email configuration
+# Vercel's serverless functions block outbound SMTP ports (25/465/587),
+# so in production OTP mail is delivered via Brevo's HTTPS API instead
+# of Gmail SMTP. When BREVO_API_KEY is absent (local development), the
+# standard Gmail SMTP backend is used.
 EMAIL_BACKEND = os.environ.get(
     "DJANGO_EMAIL_BACKEND",
-    "django.core.mail.backends.smtp.EmailBackend",
+    "config.email_backends.BrevoEmailBackend"
+    if os.environ.get("BREVO_API_KEY")
+    else "django.core.mail.backends.smtp.EmailBackend",
 )
 
 EMAIL_HOST = "smtp.gmail.com"

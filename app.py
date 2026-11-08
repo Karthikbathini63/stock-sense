@@ -26,6 +26,9 @@ def _ensure_database_ready():
     by the project owner in the Vercel dashboard; when it is absent,
     an ephemeral /tmp SQLite database is bootstrapped so the app still
     boots and serves pages.
+
+    On Postgres, a session-level advisory lock serialises concurrent
+    cold-start instances so simultaneous migrations never race.
     """
     global _database_initialized
     if _database_initialized:
@@ -37,9 +40,25 @@ def _ensure_database_ready():
     django.setup()
 
     from django.core.management import call_command
+    from django.db import connection
+
+    def _run_migrations():
+        call_command("migrate", interactive=False, verbosity=0)
+
+    engine = connection.settings_dict.get("ENGINE", "")
+    is_postgres = "postgresql" in engine
 
     try:
-        call_command("migrate", interactive=False, verbosity=0)
+        if is_postgres:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT pg_advisory_lock(%s)", [8597341])
+            try:
+                _run_migrations()
+            finally:
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT pg_advisory_unlock(%s)", [8597341])
+        else:
+            _run_migrations()
     except Exception:  # pragma: no cover - never crash the boot path
         import logging
 
