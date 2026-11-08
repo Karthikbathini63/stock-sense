@@ -1,0 +1,43 @@
+{% extends "inventory/base.html" %}
+
+{% block page_title %}Delete Product{% endblock %}
+{% block title %}Delete Product - StockSense{% endblock %}
+
+{% block content %}
+
+<div class="card p-4" style="max-width: 520px; margin: 0 auto;">
+
+    <h4 class="mb-3">Delete Product</h4>
+
+    <div class="alert alert-warning">
+        Are you sure you want to delete
+        <strong>{{ product.sku }} - {{ product.name }}</strong>?
+        <br>
+        Stock records for this product at every location will also be
+        removed. This action cannot be undone.
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="d-flex justify-content-between mt-3">
+
+            <a href="{% url 'product_list' %}" class="btn btn-secondary">
+                Cancel
+            </a>
+
+            <button type="submit" class="btn btn-danger">
+                Delete
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

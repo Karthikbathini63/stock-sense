@@ -8,78 +8,89 @@
 
 <h2>Add New Product</h2>
 
-<form method="POST">
+{% if error %}
+<div class="alert alert-danger mb-3" style="max-width: 520px;">
+    {{ error }}
+</div>
+{% endif %}
 
-    {% csrf_token %}
+<div class="card p-4" style="max-width: 520px;">
 
-    <div>
-        <label>SKU</label>
-        <input type="text" name="sku" required>
-    </div>
+    <form method="POST">
 
-    <br>
+        {% csrf_token %}
 
-    <div>
-        <label>Product Name</label>
-        <input type="text" name="name" required>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">SKU</label>
+            <input type="text"
+                   class="form-control"
+                   name="sku"
+                   value="{{ form_data.sku|default:'' }}"
+                   required>
+        </div>
 
-    <br>
+        <div class="mb-3">
+            <label class="form-label">Product Name</label>
+            <input type="text"
+                   class="form-control"
+                   name="name"
+                   value="{{ form_data.name|default:'' }}"
+                   required>
+        </div>
 
-    <div>
-        <label>Category</label>
+        <div class="mb-3">
+            <label class="form-label">Category</label>
 
-        <select name="category" required>
+            <select class="form-select" name="category" required>
 
-            <option value="">Select Category</option>
+                <option value="">Select Category</option>
 
-            {% for category in categories %}
-                <option value="{{ category.id }}">
-                    {{ category.name }}
-                </option>
-            {% endfor %}
+                {% for category in categories %}
+                    <option value="{{ category.id }}"
+                            {% if form_data.category == category.id|stringformat:"s" %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
 
-        </select>
-    </div>
+            </select>
+        </div>
 
-    <br>
+        <div class="mb-3">
+            <label class="form-label">Unit of Measure</label>
+            <input type="text"
+                   class="form-control"
+                   name="unit_of_measure"
+                   placeholder="Pieces"
+                   value="{{ form_data.unit_of_measure|default:'' }}"
+                   required>
+        </div>
 
-    <div>
-        <label>Unit of Measure</label>
-        <input type="text"
-               name="unit_of_measure"
-               placeholder="Pieces"
-               required>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control"
+                      name="description">{{ form_data.description|default:'' }}</textarea>
+        </div>
 
-    <br>
+        <div class="mb-3">
+            <label class="form-label">Reorder Level</label>
+            <input type="number"
+                   class="form-control"
+                   name="reorder_level"
+                   min="0"
+                   value="{{ form_data.reorder_level|default:'0' }}"
+                   required>
+        </div>
 
-    <div>
-        <label>Description</label>
-        <textarea name="description"></textarea>
-    </div>
+        <button type="submit" class="btn btn-primary me-2">
+            Add Product
+        </button>
 
-    <br>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary">
+            Cancel
+        </a>
 
-    <div>
-        <label>Reorder Level</label>
-        <input type="number"
-               name="reorder_level"
-               min="0"
-               value="0"
-               required>
-    </div>
+    </form>
 
-    <br>
-
-    <button type="submit">
-        Add Product
-    </button>
-
-    <a href="{% url 'product_list' %}">
-        Cancel
-    </a>
-
-</form>
+</div>
 
 {% endblock %}

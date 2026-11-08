@@ -8,87 +8,96 @@
 
 <h2>Edit Product</h2>
 
-<form method="POST">
+{% if error %}
+<div class="alert alert-danger mb-3" style="max-width: 520px;">
+    {{ error }}
+</div>
+{% endif %}
 
-    {% csrf_token %}
+<div class="card p-4" style="max-width: 520px;">
 
-    <div>
-        <label>SKU</label>
-        <input type="text"
-               name="sku"
-               value="{{ product.sku }}"
-               required>
-    </div>
+    <form method="POST">
 
-    <br>
+        {% csrf_token %}
 
-    <div>
-        <label>Product Name</label>
-        <input type="text"
-               name="name"
-               value="{{ product.name }}"
-               required>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">SKU</label>
+            <input type="text"
+                   class="form-control"
+                   name="sku"
+                   value="{% if form_data %}{{ form_data.sku }}{% else %}{{ product.sku }}{% endif %}"
+                   required>
+        </div>
 
-    <br>
+        <div class="mb-3">
+            <label class="form-label">Product Name</label>
+            <input type="text"
+                   class="form-control"
+                   name="name"
+                   value="{% if form_data %}{{ form_data.name }}{% else %}{{ product.name }}{% endif %}"
+                   required>
+        </div>
 
-    <div>
-        <label>Category</label>
+        <div class="mb-3">
+            <label class="form-label">Category</label>
 
-        <select name="category" required>
+            <select class="form-select" name="category" required>
 
-            {% for category in categories %}
+                {% for category in categories %}
 
-                <option value="{{ category.id }}"
-                    {% if category.id == product.category.id %}
-                        selected
-                    {% endif %}>
-                    {{ category.name }}
-                </option>
+                    <option value="{{ category.id }}"
+                        {% if form_data %}
+                            {% if form_data.category == category.id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        {% else %}
+                            {% if category.id == product.category.id %}
+                                selected
+                            {% endif %}
+                        {% endif %}>
+                        {{ category.name }}
+                    </option>
 
-            {% endfor %}
+                {% endfor %}
 
-        </select>
-    </div>
+            </select>
+        </div>
 
-    <br>
+        <div class="mb-3">
+            <label class="form-label">Unit of Measure</label>
+            <input type="text"
+                   class="form-control"
+                   name="unit_of_measure"
+                   value="{% if form_data %}{{ form_data.unit_of_measure }}{% else %}{{ product.unit_of_measure }}{% endif %}"
+                   required>
+        </div>
 
-    <div>
-        <label>Unit of Measure</label>
-        <input type="text"
-               name="unit_of_measure"
-               value="{{ product.unit_of_measure }}"
-               required>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control"
+                      name="description">{% if form_data %}{{ form_data.description }}{% else %}{{ product.description }}{% endif %}</textarea>
+        </div>
 
-    <br>
+        <div class="mb-3">
+            <label class="form-label">Reorder Level</label>
+            <input type="number"
+                   class="form-control"
+                   name="reorder_level"
+                   min="0"
+                   value="{% if form_data %}{{ form_data.reorder_level }}{% else %}{{ product.reorder_level }}{% endif %}"
+                   required>
+        </div>
 
-    <div>
-        <label>Description</label>
-        <textarea name="description">{{ product.description }}</textarea>
-    </div>
+        <button type="submit" class="btn btn-primary me-2">
+            Save Changes
+        </button>
 
-    <br>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary">
+            Cancel
+        </a>
 
-    <div>
-        <label>Reorder Level</label>
-        <input type="number"
-               name="reorder_level"
-               min="0"
-               value="{{ product.reorder_level }}"
-               required>
-    </div>
+    </form>
 
-    <br>
-
-    <button type="submit">
-        Save Changes
-    </button>
-
-    <a href="{% url 'product_list' %}">
-        Cancel
-    </a>
-
-</form>
+</div>
 
 {% endblock %}

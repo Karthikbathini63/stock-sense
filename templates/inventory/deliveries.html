@@ -1,0 +1,101 @@
+
+{% extends "inventory/base.html" %}
+
+{% block title %}Deliveries - StockSense{% endblock %}
+{% block page_title %}Deliveries{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <h2>Record Stock Delivery</h2>
+    <p>Record products leaving a warehouse location.</p>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="product">Product</label>
+            <select name="product" id="product" required>
+                <option value="">Select Product</option>
+
+                {% for product in products %}
+                    <option
+                        value="{{ product.id }}"
+                        {% if selected_product == product.id|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ product.sku }} - {{ product.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Warehouse Location</label>
+            <select name="location" id="location" required>
+                <option value="">Select Location</option>
+
+                {% for location in locations %}
+                    <option
+                        value="{{ location.id }}"
+                        {% if selected_location == location.id|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ location.warehouse.name }} - {{ location.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Delivery Quantity</label>
+            <input
+                type="number"
+                name="quantity"
+                id="quantity"
+                min="1"
+                step="1"
+                value="{{ quantity|default:'' }}"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="reference">Reference Number</label>
+            <input
+                type="text"
+                name="reference"
+                id="reference"
+                maxlength="100"
+                value="{{ reference|default:'' }}"
+                placeholder="e.g. DO-1001"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea
+                name="notes"
+                id="notes"
+                rows="4"
+                placeholder="Enter delivery details"
+            >{{ notes|default:'' }}</textarea>
+        </div>
+
+        <button type="submit">Record Delivery</button>
+    </form>
+</div>
+
+{% endblock %}

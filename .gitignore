@@ -10,6 +10,8 @@ __pycache__/
 
 # Local database
 db.sqlite3
+backups/
+staticfiles/
 
 # Environment variables
 .env

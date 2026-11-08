@@ -1,0 +1,74 @@
+
+{% extends "inventory/base.html" %}
+
+{% block title %}Stock Transfers - StockSense{% endblock %}
+{% block page_title %}Stock Transfers{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Transfer Stock Between Locations</h2>
+    <p>Select a product, its source location, destination location,
+       and the quantity to transfer.</p>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="product">Product</label>
+        <select name="product" id="product" required>
+            <option value="">Select Product</option>
+            {% for product in products %}
+                <option value="{{ product.pk }}"
+                    {% if selected_product == product.pk|stringformat:"s" %}selected{% endif %}>
+                    {{ product.sku }} - {{ product.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="source_location">Source Location</label>
+        <select name="source_location" id="source_location" required>
+            <option value="">Select Source Location</option>
+            {% for location in locations %}
+                <option value="{{ location.pk }}"
+                    {% if selected_source == location.pk|stringformat:"s" %}selected{% endif %}>
+                    {{ location.warehouse.name }} - {{ location.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="destination_location">Destination Location</label>
+        <select name="destination_location" id="destination_location" required>
+            <option value="">Select Destination Location</option>
+            {% for location in locations %}
+                <option value="{{ location.pk }}"
+                    {% if selected_destination == location.pk|stringformat:"s" %}selected{% endif %}>
+                    {{ location.warehouse.name }} - {{ location.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="quantity">Transfer Quantity</label>
+        <input type="number" name="quantity" id="quantity"
+               min="1" step="1" value="{{ quantity|default:'' }}" required>
+
+        <label for="reference">Reference Number</label>
+        <input type="text" name="reference" id="reference"
+               maxlength="100" value="{{ reference|default:'' }}"
+               placeholder="e.g. TR-1001">
+
+        <label for="notes">Notes</label>
+        <textarea name="notes" id="notes" rows="4">{{ notes|default:'' }}</textarea>
+
+        <button type="submit">Transfer Stock</button>
+    </form>
+</div>
+{% endblock %}

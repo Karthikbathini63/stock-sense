@@ -8,7 +8,11 @@ urlpatterns = [
 
     # Dashboard
     path("stockdash/", views.stockdash, name="stockdash"),
-    path("stocklog/", views.stocklog, name="stocklog"),
+    path("stock-ledger/", views.stock_ledger, name="stock_ledger"),
+    path("receipts/", views.receipts, name="receipts"),
+    path("transfers/", views.transfers, name="transfers"),
+    path("adjustments/", views.adjustments, name="adjustments"),
+    path("deliveries/", views.deliveries, name="deliveries"),
 
     # Product Management
     path("products/", views.product_list, name="product_list"),
@@ -33,6 +37,7 @@ urlpatterns = [
     ),
     # Login
     path("login/", views.login, name="login"),
+    path("logout/", views.logout_view, name="logout"),
 
     # Default page
     path("", views.dashboard, name="dashboard"),

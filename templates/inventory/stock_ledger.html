@@ -1,0 +1,56 @@
+
+{% extends "inventory/base.html" %}
+
+{% block title %}Stock Ledger - StockSense{% endblock %}
+{% block page_title %}Stock Ledger{% endblock %}
+
+{% block content %}
+<h2>Stock Ledger</h2>
+<p>History of inventory movements.</p>
+
+<div style="overflow-x: auto;">
+    <table border="1" cellpadding="10" cellspacing="0"
+           style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>Date & Time</th>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Location</th>
+                <th>Transaction Type</th>
+                <th>Quantity</th>
+                <th>Reference</th>
+                <th>Notes</th>
+                <th>Recorded By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.created_at|date:"d M Y, H:i" }}</td>
+                <td>{{ transaction.product.name }}</td>
+                <td>{{ transaction.product.sku }}</td>
+                <td>{{ transaction.location.name }}</td>
+                <td>{{ transaction.get_transaction_type_display }}</td>
+                <td>
+                    {% if transaction.transaction_type == "RECEIPT" or transaction.transaction_type == "TRANSFER_IN" %}
+                        +{{ transaction.quantity }}
+                    {% elif transaction.transaction_type == "DELIVERY" or transaction.transaction_type == "TRANSFER_OUT" %}
+                        -{{ transaction.quantity }}
+                    {% else %}
+                        {{ transaction.quantity }}
+                    {% endif %}
+                </td>
+                <td>{{ transaction.reference|default:"—" }}</td>
+                <td>{{ transaction.notes|default:"—" }}</td>
+                <td>{{ transaction.created_by.username|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">No stock transactions recorded yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

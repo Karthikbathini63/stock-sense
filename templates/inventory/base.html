@@ -25,34 +25,46 @@
 
             <nav class="sidebar-nav">
 
-                <a href="{% url 'stockdash' %}" class="nav-item">
+                {% url 'stockdash' as stockdash_url %}
+                {% url 'product_list' as product_list_url %}
+                {% url 'receipts' as receipts_url %}
+                {% url 'deliveries' as deliveries_url %}
+                {% url 'transfers' as transfers_url %}
+                {% url 'adjustments' as adjustments_url %}
+                {% url 'stock_ledger' as ledger_url %}
+
+                <a href="{% url 'stockdash' %}"
+                   class="nav-item {% if request.resolver_match.url_name == 'stockdash' %}active{% endif %}">
                      Dashboard
                 </a>
 
-                <a href="#" class="nav-item">
+                <a href="{% url 'product_list' %}"
+                   class="nav-item {% if request.resolver_match.url_name in 'product_list add_product edit_product delete_product' %}active{% endif %}">
                     Products
                 </a>
 
-                <a href="#" class="nav-item">
-                    Receipts
+                <a href="{% url 'receipts' %}"
+                   class="nav-item {% if request.resolver_match.url_name == 'receipts' %}active{% endif %}">
+                 Receipts
                 </a>
-
-                <a href="#" class="nav-item">
-                    Deliveries
+                <a href="{% url 'deliveries' %}"
+                   class="nav-item {% if request.resolver_match.url_name == 'deliveries' %}active{% endif %}">
+                Deliveries
                 </a>
-
-                <a href="#" class="nav-item">
+                <a href="{% url 'transfers' %}"
+                   class="nav-item {% if request.resolver_match.url_name == 'transfers' %}active{% endif %}">
                     Transfers
                 </a>
 
-                <a href="#" class="nav-item">
+                <a href="{% url 'adjustments' %}"
+                   class="nav-item {% if request.resolver_match.url_name == 'adjustments' %}active{% endif %}">
                     Adjustments
                 </a>
 
-                <a href="#" class="nav-item">
-                    Stock Ledger
+                <a href="{% url 'stock_ledger' %}"
+                   class="nav-item {% if request.resolver_match.url_name == 'stock_ledger' %}active{% endif %}">
+                Stock Ledger
                 </a>
-
             </nav>
 
             <div class="sidebar-bottom">
@@ -61,9 +73,12 @@
                     Admin Panel
                 </a>
 
-                <a href="#" class="nav-item logout">
-                    Logout
-                </a>
+                <form method="post" action="{% url 'logout' %}" style="margin:0;">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-item logout" style="border:none; background:none; width:100%; text-align:left; cursor:pointer;">
+                        Logout
+                    </button>
+                </form>
 
             </div>
 
@@ -89,6 +104,19 @@
 
             <!-- Page Content -->
             <section class="content">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert
+                            {% if message.tags == 'success' %}alert-success
+                            {% elif message.tags == 'error' %}alert-danger
+                            {% elif message.tags == 'warning' %}alert-warning
+                            {% else %}alert-info{% endif %} alert-dismissible fade show mb-3">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
 
                 {% block content %}
 
