@@ -23,3 +23,4 @@ backups/
 Thumbs.db
 .vercel
 .env*
+brevo_key.txt
